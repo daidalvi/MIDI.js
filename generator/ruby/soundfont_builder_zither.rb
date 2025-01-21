@@ -29,7 +29,7 @@ require 'zlib'
 include FileUtils
 
 BUILD_DIR = "./soundfont" # Output path
-SOUNDFONT = "../sf2/redco/TR-808-Drums.SF2" # Soundfont file path
+SOUNDFONT = "../../../soundfonts/SF2banks/GuitarAcoustic.sf2" # Soundfont file path
 
 # This script will generate MIDI.js-compatible instrument JS files for
 # all instruments in the below array. Add or remove as necessary.
@@ -75,31 +75,31 @@ puts
 puts "Sending output to: " + BUILD_DIR
 puts
 
-raise "Can't find soundfont: #{SOUNDFONT}" unless File.exists? SOUNDFONT
+raise "Can't find soundfont: #{SOUNDFONT}" unless File.exist? SOUNDFONT
 raise "Can't find 'oggenc' command" if OGGENC.empty?
 raise "Can't find 'lame' command" if LAME.empty?
 raise "Can't find 'fluidsynth' command" if FLUIDSYNTH.empty?
-raise "Output directory does not exist: #{BUILD_DIR}" unless File.exists?(BUILD_DIR)
+raise "Output directory does not exist: #{BUILD_DIR}" unless File.exist?(BUILD_DIR)
 
 puts "Hit return to begin."
 $stdin.readline
 
 NOTES = {
-  "C"  => 0,
-  "Db" => 1,
-  "D"  => 2,
-  "Eb" => 3,
-  "E"  => 4,
-  "F"  => 5,
-  "Gb" => 6,
-  "G"  => 7,
-  "Ab" => 8,
-  "A"  => 9,
-  "Bb" => 10,
-  "B"  => 11
+  "c"  => 0,
+  "cx" => 1,
+  "d"  => 2,
+  "dx" => 3,
+  "e"  => 4,
+  "f"  => 5,
+  "fx" => 6,
+  "g"  => 7,
+  "gx" => 8,
+  "a"  => 9,
+  "ax" => 10,
+  "b"  => 11
 }
 
-MIDI_C0 = 12
+MIDI_C0 = 24 #12
 VELOCITY = 85
 DURATION = Integer(3000)
 TEMP_FILE = "#{BUILD_DIR}/temp.midi"
@@ -192,9 +192,9 @@ def generate_audio(program)
   ogg_js_file = open_js_file(instrument_key, "ogg")
   mp3_js_file = open_js_file(instrument_key, "mp3")
 
-  note_to_int("A", 0).upto(note_to_int("C", 8)) do |note_value|
+  note_to_int("a", 0).upto(note_to_int("c", 8)) do |note_value|
     note = int_to_note(note_value)
-    output_name = "#{note[:key]}#{note[:octave]}"
+    output_name = "#{note[:octave]}#{note[:key]}"
     output_path_prefix = BUILD_DIR + "/" + output_name
 
     puts "Generating: #{output_name}"
